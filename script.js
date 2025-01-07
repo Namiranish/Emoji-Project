@@ -1,26 +1,35 @@
 const search = document.getElementById('search');
 const emojiContainer = document.getElementById('emojiContainer');
 const btn = document.getElementById('btn');
+const buttons = document.querySelectorAll('.buttons button');
 
-window.addEventListener('load',()=>{
-    emojiList.forEach((ele)=>{
-        let p = document.createElement('p');
-        p.innerText = ele.emoji
-        // console.log(emojiContainer.innerText);
-        emojiContainer.append(p)
-    });
-});
-
-btn.addEventListener('click',()=>{
-    let inputValue = search.value.toLowerCase();
-    // console.log(inputValue);
-    emojiContainer.innerText = ""
-    emojiList.forEach((ele)=>{   
-        if(ele.description.includes(inputValue)){
-            let filteredEmoji = document.createElement('p');
-            filteredEmoji.innerText = ele.emoji
-            emojiContainer.append(filteredEmoji)
-            console.log(emojiContainer.innerText);
+// Function to display emojis based on a filter
+function displayEmojis(filter = "") {
+    emojiContainer.innerText = ""; // Clear the container
+    emojiList.forEach((ele) => {
+        if (filter === "" || ele.category === filter || ele.description.includes(filter)) {
+            let p = document.createElement('p');
+            p.innerText = ele.emoji;
+            emojiContainer.append(p);
         }
     });
-})
+}
+
+// Load all emojis on window load
+window.addEventListener('load', () => {
+    displayEmojis();
+});
+
+// Search button functionality
+btn.addEventListener('click', () => {
+    let inputValue = search.value.toLowerCase();
+    displayEmojis(inputValue);
+});
+
+// Add click event listeners to category buttons
+buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+        const category = button.textContent.toLowerCase(); // Get category name from button text
+        displayEmojis(category);
+    });
+});
